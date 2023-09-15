@@ -1,4 +1,4 @@
-module github.com/poy-web3/protos
+module github.com/poy-web3/protos/register_service
 
 go 1.21.1
 
