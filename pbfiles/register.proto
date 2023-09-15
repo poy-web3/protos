@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option go_package = "github.com/poy-web3/protos/register_service";
+
+enum ERR_CODE_REGISTER_SERVICE {
+    CODE_NO_ERROR_REGISTER_SERVICE = 0;
+    CODE_ERR_MISSING_PARAM_REGISTER_SERVICE = -1;
+    CODE_ERR_INVALID_PARAM_REGISTER_SERVICE = -2;
+    CODE_ERR_FACE_EXISTING_REGISTER_SERVICE = -3;
+    CODE_ERR_UNKNOWN_REGISTER_SERVICE = -1001;
+}
+
+message BioRegisterRequset {
+    string account_public_key = 1;
+    repeated bytes facial_images = 2;
+}
+
+message BioRegisterResponse {
+    CommonRspHeaderRegisterService header = 1;
+}
+
+message CommonRspHeaderRegisterService {
+    int32 ret = 1;
+    string reason = 2;
+}
+
+service RegisterService {
+    rpc RegisterWithBioKey(BioRegisterRequset) returns (BioRegisterResponse);
+}
+
+// protoc --proto_path=. --go_out=../register_service --go_opt=paths=source_relative --go-grpc_out=../register_service --go-grpc_opt=paths=source_relative register.proto
