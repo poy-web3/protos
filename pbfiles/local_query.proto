@@ -11,6 +11,7 @@ enum ERR_CODE_LOCAL_QUERY_SERVICE {
 
 message UserValidityCheckRequest {
     string public_key = 1;    // identifier
+    string token = 2;
 }
 
 message UserValidityResponse {
