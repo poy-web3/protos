@@ -1,4 +1,4 @@
-module github.com/poy-web3/protos/user_query_service
+module github.com/poy-web3/protos/peer_communication_service
 
 go 1.20
 
