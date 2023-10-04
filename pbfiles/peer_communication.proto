@@ -9,8 +9,7 @@ enum ERR_CODE_PEER_COMMUNICATION_SERVICE {
     CODE_ERR_UNKNOWN_PEER_COMMUNICATION_SERVICE = -1001;
 }
 
-message BlockHeightRequest {
-}
+message BlockHeightRequest {}
 
 message BlockHeightReponse {
     CommonRspHeaderPeerCommunicationService header = 1;
@@ -44,6 +43,13 @@ message GetCoinOwnerResponse {
     bytes address_in_bytes = 2;
 }
 
+message GetTxFromReadBufferRequest {}
+
+message GetTxFromReadBufferResponse {
+    CommonRspHeaderPeerCommunicationService header = 1;
+    bytes encoded_tx_list = 2;
+}
+
 message CommonRspHeaderPeerCommunicationService {
     int32 ret = 1;
     string reason = 2;
@@ -54,6 +60,7 @@ service PeerCommunicationService {
     rpc GetRecentHeaders(GetRecentHeadersRequest) returns (GetRecentHeadersResponse);
     rpc ValidatorSetByHeight(ValidatorSetByHeightRequest) returns (ValidatorSetByHeightResponse);
     rpc GetCoinOwner(GetCoinOwnerRequest) returns (GetCoinOwnerResponse);
+    rpc GetTxFromReadBuffer(GetTxFromReadBufferRequest) returns (GetTxFromReadBufferResponse);
 }
 
 // protoc --proto_path=. --go_out=../peer_communication_service --go_opt=paths=source_relative --go-grpc_out=../peer_communication_service --go-grpc_opt=paths=source_relative peer_communication.proto

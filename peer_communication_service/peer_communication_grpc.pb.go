@@ -4,7 +4,7 @@
 // - protoc             v4.24.3
 // source: peer_communication.proto
 
-package peer_communication_service
+package __
 
 import (
 	context "context"
@@ -26,6 +26,7 @@ type PeerCommunicationServiceClient interface {
 	GetRecentHeaders(ctx context.Context, in *GetRecentHeadersRequest, opts ...grpc.CallOption) (*GetRecentHeadersResponse, error)
 	ValidatorSetByHeight(ctx context.Context, in *ValidatorSetByHeightRequest, opts ...grpc.CallOption) (*ValidatorSetByHeightResponse, error)
 	GetCoinOwner(ctx context.Context, in *GetCoinOwnerRequest, opts ...grpc.CallOption) (*GetCoinOwnerResponse, error)
+	GetTxFromReadBuffer(ctx context.Context, in *GetTxFromReadBufferRequest, opts ...grpc.CallOption) (*GetTxFromReadBufferResponse, error)
 }
 
 type peerCommunicationServiceClient struct {
@@ -72,6 +73,15 @@ func (c *peerCommunicationServiceClient) GetCoinOwner(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *peerCommunicationServiceClient) GetTxFromReadBuffer(ctx context.Context, in *GetTxFromReadBufferRequest, opts ...grpc.CallOption) (*GetTxFromReadBufferResponse, error) {
+	out := new(GetTxFromReadBufferResponse)
+	err := c.cc.Invoke(ctx, "/PeerCommunicationService/GetTxFromReadBuffer", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PeerCommunicationServiceServer is the server API for PeerCommunicationService service.
 // All implementations must embed UnimplementedPeerCommunicationServiceServer
 // for forward compatibility
@@ -80,6 +90,7 @@ type PeerCommunicationServiceServer interface {
 	GetRecentHeaders(context.Context, *GetRecentHeadersRequest) (*GetRecentHeadersResponse, error)
 	ValidatorSetByHeight(context.Context, *ValidatorSetByHeightRequest) (*ValidatorSetByHeightResponse, error)
 	GetCoinOwner(context.Context, *GetCoinOwnerRequest) (*GetCoinOwnerResponse, error)
+	GetTxFromReadBuffer(context.Context, *GetTxFromReadBufferRequest) (*GetTxFromReadBufferResponse, error)
 	mustEmbedUnimplementedPeerCommunicationServiceServer()
 }
 
@@ -98,6 +109,9 @@ func (UnimplementedPeerCommunicationServiceServer) ValidatorSetByHeight(context.
 }
 func (UnimplementedPeerCommunicationServiceServer) GetCoinOwner(context.Context, *GetCoinOwnerRequest) (*GetCoinOwnerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCoinOwner not implemented")
+}
+func (UnimplementedPeerCommunicationServiceServer) GetTxFromReadBuffer(context.Context, *GetTxFromReadBufferRequest) (*GetTxFromReadBufferResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTxFromReadBuffer not implemented")
 }
 func (UnimplementedPeerCommunicationServiceServer) mustEmbedUnimplementedPeerCommunicationServiceServer() {
 }
@@ -185,6 +199,24 @@ func _PeerCommunicationService_GetCoinOwner_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PeerCommunicationService_GetTxFromReadBuffer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTxFromReadBufferRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeerCommunicationServiceServer).GetTxFromReadBuffer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/PeerCommunicationService/GetTxFromReadBuffer",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeerCommunicationServiceServer).GetTxFromReadBuffer(ctx, req.(*GetTxFromReadBufferRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PeerCommunicationService_ServiceDesc is the grpc.ServiceDesc for PeerCommunicationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -207,6 +239,10 @@ var PeerCommunicationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCoinOwner",
 			Handler:    _PeerCommunicationService_GetCoinOwner_Handler,
+		},
+		{
+			MethodName: "GetTxFromReadBuffer",
+			Handler:    _PeerCommunicationService_GetTxFromReadBuffer_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
