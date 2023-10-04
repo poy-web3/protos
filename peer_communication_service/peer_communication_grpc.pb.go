@@ -4,7 +4,7 @@
 // - protoc             v4.24.3
 // source: peer_communication.proto
 
-package __
+package peer_communication_service
 
 import (
 	context "context"
