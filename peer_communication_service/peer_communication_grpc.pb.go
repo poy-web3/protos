@@ -22,11 +22,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PeerCommunicationServiceClient interface {
-	BlockHeight(ctx context.Context, in *BlockHeightRequest, opts ...grpc.CallOption) (*BlockHeightReponse, error)
+	BlockHeight(ctx context.Context, in *BlockHeightRequest, opts ...grpc.CallOption) (*BlockHeightResponse, error)
 	GetRecentHeaders(ctx context.Context, in *GetRecentHeadersRequest, opts ...grpc.CallOption) (*GetRecentHeadersResponse, error)
 	ValidatorSetByHeight(ctx context.Context, in *ValidatorSetByHeightRequest, opts ...grpc.CallOption) (*ValidatorSetByHeightResponse, error)
 	GetCoinOwner(ctx context.Context, in *GetCoinOwnerRequest, opts ...grpc.CallOption) (*GetCoinOwnerResponse, error)
 	GetTxFromReadBuffer(ctx context.Context, in *GetTxFromReadBufferRequest, opts ...grpc.CallOption) (*GetTxFromReadBufferResponse, error)
+	SendTx(ctx context.Context, in *SendTxRequest, opts ...grpc.CallOption) (*SendTxResponse, error)
 }
 
 type peerCommunicationServiceClient struct {
@@ -37,8 +38,8 @@ func NewPeerCommunicationServiceClient(cc grpc.ClientConnInterface) PeerCommunic
 	return &peerCommunicationServiceClient{cc}
 }
 
-func (c *peerCommunicationServiceClient) BlockHeight(ctx context.Context, in *BlockHeightRequest, opts ...grpc.CallOption) (*BlockHeightReponse, error) {
-	out := new(BlockHeightReponse)
+func (c *peerCommunicationServiceClient) BlockHeight(ctx context.Context, in *BlockHeightRequest, opts ...grpc.CallOption) (*BlockHeightResponse, error) {
+	out := new(BlockHeightResponse)
 	err := c.cc.Invoke(ctx, "/PeerCommunicationService/BlockHeight", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -82,15 +83,25 @@ func (c *peerCommunicationServiceClient) GetTxFromReadBuffer(ctx context.Context
 	return out, nil
 }
 
+func (c *peerCommunicationServiceClient) SendTx(ctx context.Context, in *SendTxRequest, opts ...grpc.CallOption) (*SendTxResponse, error) {
+	out := new(SendTxResponse)
+	err := c.cc.Invoke(ctx, "/PeerCommunicationService/SendTx", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PeerCommunicationServiceServer is the server API for PeerCommunicationService service.
 // All implementations must embed UnimplementedPeerCommunicationServiceServer
 // for forward compatibility
 type PeerCommunicationServiceServer interface {
-	BlockHeight(context.Context, *BlockHeightRequest) (*BlockHeightReponse, error)
+	BlockHeight(context.Context, *BlockHeightRequest) (*BlockHeightResponse, error)
 	GetRecentHeaders(context.Context, *GetRecentHeadersRequest) (*GetRecentHeadersResponse, error)
 	ValidatorSetByHeight(context.Context, *ValidatorSetByHeightRequest) (*ValidatorSetByHeightResponse, error)
 	GetCoinOwner(context.Context, *GetCoinOwnerRequest) (*GetCoinOwnerResponse, error)
 	GetTxFromReadBuffer(context.Context, *GetTxFromReadBufferRequest) (*GetTxFromReadBufferResponse, error)
+	SendTx(context.Context, *SendTxRequest) (*SendTxResponse, error)
 	mustEmbedUnimplementedPeerCommunicationServiceServer()
 }
 
@@ -98,7 +109,7 @@ type PeerCommunicationServiceServer interface {
 type UnimplementedPeerCommunicationServiceServer struct {
 }
 
-func (UnimplementedPeerCommunicationServiceServer) BlockHeight(context.Context, *BlockHeightRequest) (*BlockHeightReponse, error) {
+func (UnimplementedPeerCommunicationServiceServer) BlockHeight(context.Context, *BlockHeightRequest) (*BlockHeightResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BlockHeight not implemented")
 }
 func (UnimplementedPeerCommunicationServiceServer) GetRecentHeaders(context.Context, *GetRecentHeadersRequest) (*GetRecentHeadersResponse, error) {
@@ -112,6 +123,9 @@ func (UnimplementedPeerCommunicationServiceServer) GetCoinOwner(context.Context,
 }
 func (UnimplementedPeerCommunicationServiceServer) GetTxFromReadBuffer(context.Context, *GetTxFromReadBufferRequest) (*GetTxFromReadBufferResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTxFromReadBuffer not implemented")
+}
+func (UnimplementedPeerCommunicationServiceServer) SendTx(context.Context, *SendTxRequest) (*SendTxResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendTx not implemented")
 }
 func (UnimplementedPeerCommunicationServiceServer) mustEmbedUnimplementedPeerCommunicationServiceServer() {
 }
@@ -217,6 +231,24 @@ func _PeerCommunicationService_GetTxFromReadBuffer_Handler(srv interface{}, ctx 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PeerCommunicationService_SendTx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendTxRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeerCommunicationServiceServer).SendTx(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/PeerCommunicationService/SendTx",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeerCommunicationServiceServer).SendTx(ctx, req.(*SendTxRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PeerCommunicationService_ServiceDesc is the grpc.ServiceDesc for PeerCommunicationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -243,6 +275,10 @@ var PeerCommunicationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTxFromReadBuffer",
 			Handler:    _PeerCommunicationService_GetTxFromReadBuffer_Handler,
+		},
+		{
+			MethodName: "SendTx",
+			Handler:    _PeerCommunicationService_SendTx_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
