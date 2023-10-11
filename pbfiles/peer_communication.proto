@@ -9,45 +9,20 @@ enum ERR_CODE_PEER_COMMUNICATION_SERVICE {
     CODE_ERR_UNKNOWN_PEER_COMMUNICATION_SERVICE = -1001;
 }
 
-message BlockHeightRequest {}
-
-message BlockHeightResponse {
-    CommonRspHeaderPeerCommunicationService header = 1;
-    uint64 height = 2;
-}
-
-message GetRecentHeadersRequest {
+message GetBlockByHeightRequest {
     uint64 height = 1;
 }
 
-message GetRecentHeadersResponse {
+message GetBlockByHeightResponse {
     CommonRspHeaderPeerCommunicationService header = 1;
-    bytes encoded_header_list = 2;
-}
-
-message ValidatorSetByHeightRequest {
-    uint64 height = 1;
-}
-
-message ValidatorSetByHeightResponse {
-    CommonRspHeaderPeerCommunicationService header = 1;
-    bytes encoded_validator_list = 2;
-}
-
-message GetCoinOwnerRequest {
-    bytes path = 1;
-}
-
-message GetCoinOwnerResponse {
-    CommonRspHeaderPeerCommunicationService header = 1;
-    bytes address_in_bytes = 2;
+    bytes encoded_block = 2;
 }
 
 message SendTxRequest {
     bytes sender = 1;
     bytes receiver = 2;
     uint64 amount = 3;
-    repeated bytes encoded_coins_list = 4;
+    bytes encoded_coins_list = 4;
 }
 
 message SendTxResponse {
@@ -68,12 +43,9 @@ message CommonRspHeaderPeerCommunicationService {
 }
 
 service PeerCommunicationService {
-    rpc BlockHeight(BlockHeightRequest) returns (BlockHeightResponse);
-    rpc GetRecentHeaders(GetRecentHeadersRequest) returns (GetRecentHeadersResponse);
-    rpc ValidatorSetByHeight(ValidatorSetByHeightRequest) returns (ValidatorSetByHeightResponse);
-    rpc GetCoinOwner(GetCoinOwnerRequest) returns (GetCoinOwnerResponse);
-    rpc GetTxFromReadBuffer(GetTxFromReadBufferRequest) returns (GetTxFromReadBufferResponse);
+    rpc GetBlockByHeight(GetBlockByHeightRequest) returns (GetBlockByHeightResponse);
     rpc SendTx(SendTxRequest) returns (SendTxResponse);
+    rpc GetTxFromReadBuffer(GetTxFromReadBufferRequest) returns (GetTxFromReadBufferResponse);
 }
 
 // protoc --proto_path=. --go_out=../peer_communication_service --go_opt=paths=source_relative --go-grpc_out=../peer_communication_service --go-grpc_opt=paths=source_relative peer_communication.proto
