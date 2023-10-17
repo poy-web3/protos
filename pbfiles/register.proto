@@ -16,6 +16,7 @@ message BioRegisterRequset {
 
 message BioRegisterResponse {
     CommonRspHeader header = 1;
+    string token = 2;
 }
 
 message CommonRspHeader {
