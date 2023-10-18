@@ -19,7 +19,7 @@ message BioRegisterResponse {
     CommonRspHeader header = 1;
     string token = 2;
     string public_key = 3;
-    string encryption_private_key = 4;
+    bytes encryption_private_key = 4;
 }
 
 message CommonRspHeader {
