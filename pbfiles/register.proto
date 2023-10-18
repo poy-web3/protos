@@ -12,11 +12,14 @@ enum ERR_CODE {
 
 message BioRegisterRequset {
     repeated bytes facial_images = 1;
+    bytes encryption_pk = 2;
 }
 
 message BioRegisterResponse {
     CommonRspHeader header = 1;
     string token = 2;
+    string public_key = 3;
+    string encryption_private_key = 4;
 }
 
 message CommonRspHeader {
