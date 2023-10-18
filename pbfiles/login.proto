@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/poy-web3/login_service";
+option go_package = ".;login_service";
 
 enum ERR_CODE_LOGIN_SERVICE {
     CODE_NO_ERROR_LOGIN_SERVICE = 0;
@@ -10,14 +10,13 @@ enum ERR_CODE_LOGIN_SERVICE {
 }
 
 message BioKeyLoginRequset {
-    string account_uuid = 1; // 目前暂时用public_key作为标识
-    string encrypted_bioinfo = 2;
-    int64 timestamp = 3;
+    bytes facial_image= 1;
+    string public_key = 2;
 }
 
 message BioKeyLoginResponse {
     CommonRspHeaderLoginService header = 1;
-    int32 amount = 2;
+    string token = 2;
 }
 
 message CommonRspHeaderLoginService {
