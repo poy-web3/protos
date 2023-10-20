@@ -25,6 +25,7 @@ type PeerCommunicationServiceClient interface {
 	GetBlockByHeight(ctx context.Context, in *GetBlockByHeightRequest, opts ...grpc.CallOption) (*GetBlockByHeightResponse, error)
 	SendTx(ctx context.Context, in *SendTxRequest, opts ...grpc.CallOption) (*SendTxResponse, error)
 	GetTxFromReadBuffer(ctx context.Context, in *GetTxFromReadBufferRequest, opts ...grpc.CallOption) (*GetTxFromReadBufferResponse, error)
+	GenerateCoin(ctx context.Context, in *GenerateCoinRequest, opts ...grpc.CallOption) (*GenerateCoinResponse, error)
 }
 
 type peerCommunicationServiceClient struct {
@@ -62,6 +63,15 @@ func (c *peerCommunicationServiceClient) GetTxFromReadBuffer(ctx context.Context
 	return out, nil
 }
 
+func (c *peerCommunicationServiceClient) GenerateCoin(ctx context.Context, in *GenerateCoinRequest, opts ...grpc.CallOption) (*GenerateCoinResponse, error) {
+	out := new(GenerateCoinResponse)
+	err := c.cc.Invoke(ctx, "/PeerCommunicationService/GenerateCoin", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PeerCommunicationServiceServer is the server API for PeerCommunicationService service.
 // All implementations must embed UnimplementedPeerCommunicationServiceServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type PeerCommunicationServiceServer interface {
 	GetBlockByHeight(context.Context, *GetBlockByHeightRequest) (*GetBlockByHeightResponse, error)
 	SendTx(context.Context, *SendTxRequest) (*SendTxResponse, error)
 	GetTxFromReadBuffer(context.Context, *GetTxFromReadBufferRequest) (*GetTxFromReadBufferResponse, error)
+	GenerateCoin(context.Context, *GenerateCoinRequest) (*GenerateCoinResponse, error)
 	mustEmbedUnimplementedPeerCommunicationServiceServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedPeerCommunicationServiceServer) SendTx(context.Context, *Send
 }
 func (UnimplementedPeerCommunicationServiceServer) GetTxFromReadBuffer(context.Context, *GetTxFromReadBufferRequest) (*GetTxFromReadBufferResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTxFromReadBuffer not implemented")
+}
+func (UnimplementedPeerCommunicationServiceServer) GenerateCoin(context.Context, *GenerateCoinRequest) (*GenerateCoinResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateCoin not implemented")
 }
 func (UnimplementedPeerCommunicationServiceServer) mustEmbedUnimplementedPeerCommunicationServiceServer() {
 }
@@ -153,6 +167,24 @@ func _PeerCommunicationService_GetTxFromReadBuffer_Handler(srv interface{}, ctx 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PeerCommunicationService_GenerateCoin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenerateCoinRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeerCommunicationServiceServer).GenerateCoin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/PeerCommunicationService/GenerateCoin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeerCommunicationServiceServer).GenerateCoin(ctx, req.(*GenerateCoinRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PeerCommunicationService_ServiceDesc is the grpc.ServiceDesc for PeerCommunicationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -171,6 +203,10 @@ var PeerCommunicationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTxFromReadBuffer",
 			Handler:    _PeerCommunicationService_GetTxFromReadBuffer_Handler,
+		},
+		{
+			MethodName: "GenerateCoin",
+			Handler:    _PeerCommunicationService_GenerateCoin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
