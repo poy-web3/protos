@@ -35,11 +35,10 @@ message SendTxResponse {
 }
 
 message GenerateCoinRequest{
-    CommonRspHeaderPeerCommunicationService header = 1;
-    string country = 2;
-    bytes token = 3;
-    bytes siginiture = 4;
-    bytes public_key = 5;
+    string country = 1;
+    bytes token = 2;
+    bytes signature = 3;
+    bytes public_key = 4;
 }
 
 message GenerateCoinResponse{
@@ -60,7 +59,7 @@ message CommonRspHeaderPeerCommunicationService {
     string reason = 2;
 }
 
-service PeerCommunicationService {
+service PeerCommunication {
     rpc GetBlockByHeight(GetBlockByHeightRequest) returns (GetBlockByHeightResponse);
     rpc SendTx(SendTxRequest) returns (SendTxResponse);
     rpc GetTxFromReadBuffer(GetTxFromReadBufferRequest) returns (GetTxFromReadBufferResponse);
