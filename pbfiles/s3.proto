@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "github.com/poy-web3/protos/s3_service";
+
+message UploadConstImageRequest {
+	bytes const_image = 1;
+	string yid = 2;
+}
+
+message UploadConstImageResponse {
+	bool succ = 1;
+	string error_message = 2;
+}
+
+message UploadIndexImageRequest {
+	map<string, bytes> faceid_image = 1;
+	string yid = 2;
+}
+
+message UploadIndexImageResponse {
+	bool succ = 1;
+	string error_message = 2;
+}
+
+service S3Service {
+    rpc UploadConstImage(UploadConstImageRequest) returns (UploadConstImageResponse);
+	rpc UploadIndexImage(UploadIndexImageRequest) returns (UploadIndexImageResponse);
+}
+
+// protoc --proto_path=. --go_out=../s3_service --go_opt=paths=source_relative --go-grpc_out=../s3_service --go-grpc_opt=paths=source_relative s3.proto
