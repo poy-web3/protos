@@ -7,7 +7,7 @@ message UploadConstImageRequest {
 	string yid = 2;
 }
 
-message UploadConstImageResponse {
+message S3Response {
 	bool succ = 1;
 	string error_message = 2;
 }
@@ -17,14 +17,15 @@ message UploadIndexImageRequest {
 	string yid = 2;
 }
 
-message UploadIndexImageResponse {
-	bool succ = 1;
-	string error_message = 2;
+message UpdateIndexImageRequest {
+	map<string, bytes> faceid_image = 1;
+	string yid = 2;
 }
 
 service S3 {
-    rpc UploadConstImage(UploadConstImageRequest) returns (UploadConstImageResponse);
-	rpc UploadIndexImage(UploadIndexImageRequest) returns (UploadIndexImageResponse);
+    rpc UploadConstImage(UploadConstImageRequest) returns (S3Response);
+	rpc UploadIndexImage(UploadIndexImageRequest) returns (S3Response);
+	rpc UpdateIndexImage(UpdateIndexImageRequest) returns (S3Response);
 }
 
 // protoc --proto_path=. --go_out=../s3_service --go_opt=paths=source_relative --go-grpc_out=../s3_service --go-grpc_opt=paths=source_relative s3.proto
