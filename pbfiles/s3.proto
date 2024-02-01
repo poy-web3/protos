@@ -22,7 +22,7 @@ message UploadIndexImageResponse {
 	string error_message = 2;
 }
 
-service S3Service {
+service S3 {
     rpc UploadConstImage(UploadConstImageRequest) returns (UploadConstImageResponse);
 	rpc UploadIndexImage(UploadIndexImageRequest) returns (UploadIndexImageResponse);
 }

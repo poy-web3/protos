@@ -19,126 +19,126 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	S3Service_UploadConstImage_FullMethodName = "/S3Service/UploadConstImage"
-	S3Service_UploadIndexImage_FullMethodName = "/S3Service/UploadIndexImage"
+	S3_UploadConstImage_FullMethodName = "/S3/UploadConstImage"
+	S3_UploadIndexImage_FullMethodName = "/S3/UploadIndexImage"
 )
 
-// S3ServiceClient is the client API for S3Service service.
+// S3Client is the client API for S3 service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type S3ServiceClient interface {
+type S3Client interface {
 	UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*UploadConstImageResponse, error)
 	UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*UploadIndexImageResponse, error)
 }
 
-type s3ServiceClient struct {
+type s3Client struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewS3ServiceClient(cc grpc.ClientConnInterface) S3ServiceClient {
-	return &s3ServiceClient{cc}
+func NewS3Client(cc grpc.ClientConnInterface) S3Client {
+	return &s3Client{cc}
 }
 
-func (c *s3ServiceClient) UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*UploadConstImageResponse, error) {
+func (c *s3Client) UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*UploadConstImageResponse, error) {
 	out := new(UploadConstImageResponse)
-	err := c.cc.Invoke(ctx, S3Service_UploadConstImage_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, S3_UploadConstImage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *s3ServiceClient) UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*UploadIndexImageResponse, error) {
+func (c *s3Client) UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*UploadIndexImageResponse, error) {
 	out := new(UploadIndexImageResponse)
-	err := c.cc.Invoke(ctx, S3Service_UploadIndexImage_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, S3_UploadIndexImage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// S3ServiceServer is the server API for S3Service service.
-// All implementations must embed UnimplementedS3ServiceServer
+// S3Server is the server API for S3 service.
+// All implementations must embed UnimplementedS3Server
 // for forward compatibility
-type S3ServiceServer interface {
+type S3Server interface {
 	UploadConstImage(context.Context, *UploadConstImageRequest) (*UploadConstImageResponse, error)
 	UploadIndexImage(context.Context, *UploadIndexImageRequest) (*UploadIndexImageResponse, error)
-	mustEmbedUnimplementedS3ServiceServer()
+	mustEmbedUnimplementedS3Server()
 }
 
-// UnimplementedS3ServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedS3ServiceServer struct {
+// UnimplementedS3Server must be embedded to have forward compatible implementations.
+type UnimplementedS3Server struct {
 }
 
-func (UnimplementedS3ServiceServer) UploadConstImage(context.Context, *UploadConstImageRequest) (*UploadConstImageResponse, error) {
+func (UnimplementedS3Server) UploadConstImage(context.Context, *UploadConstImageRequest) (*UploadConstImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadConstImage not implemented")
 }
-func (UnimplementedS3ServiceServer) UploadIndexImage(context.Context, *UploadIndexImageRequest) (*UploadIndexImageResponse, error) {
+func (UnimplementedS3Server) UploadIndexImage(context.Context, *UploadIndexImageRequest) (*UploadIndexImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadIndexImage not implemented")
 }
-func (UnimplementedS3ServiceServer) mustEmbedUnimplementedS3ServiceServer() {}
+func (UnimplementedS3Server) mustEmbedUnimplementedS3Server() {}
 
-// UnsafeS3ServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to S3ServiceServer will
+// UnsafeS3Server may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to S3Server will
 // result in compilation errors.
-type UnsafeS3ServiceServer interface {
-	mustEmbedUnimplementedS3ServiceServer()
+type UnsafeS3Server interface {
+	mustEmbedUnimplementedS3Server()
 }
 
-func RegisterS3ServiceServer(s grpc.ServiceRegistrar, srv S3ServiceServer) {
-	s.RegisterService(&S3Service_ServiceDesc, srv)
+func RegisterS3Server(s grpc.ServiceRegistrar, srv S3Server) {
+	s.RegisterService(&S3_ServiceDesc, srv)
 }
 
-func _S3Service_UploadConstImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _S3_UploadConstImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UploadConstImageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(S3ServiceServer).UploadConstImage(ctx, in)
+		return srv.(S3Server).UploadConstImage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: S3Service_UploadConstImage_FullMethodName,
+		FullMethod: S3_UploadConstImage_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(S3ServiceServer).UploadConstImage(ctx, req.(*UploadConstImageRequest))
+		return srv.(S3Server).UploadConstImage(ctx, req.(*UploadConstImageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _S3Service_UploadIndexImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _S3_UploadIndexImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UploadIndexImageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(S3ServiceServer).UploadIndexImage(ctx, in)
+		return srv.(S3Server).UploadIndexImage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: S3Service_UploadIndexImage_FullMethodName,
+		FullMethod: S3_UploadIndexImage_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(S3ServiceServer).UploadIndexImage(ctx, req.(*UploadIndexImageRequest))
+		return srv.(S3Server).UploadIndexImage(ctx, req.(*UploadIndexImageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// S3Service_ServiceDesc is the grpc.ServiceDesc for S3Service service.
+// S3_ServiceDesc is the grpc.ServiceDesc for S3 service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var S3Service_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "S3Service",
-	HandlerType: (*S3ServiceServer)(nil),
+var S3_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "S3",
+	HandlerType: (*S3Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "UploadConstImage",
-			Handler:    _S3Service_UploadConstImage_Handler,
+			Handler:    _S3_UploadConstImage_Handler,
 		},
 		{
 			MethodName: "UploadIndexImage",
-			Handler:    _S3Service_UploadIndexImage_Handler,
+			Handler:    _S3_UploadIndexImage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
