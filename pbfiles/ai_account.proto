@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/poy-web3/protos/ai_account";
+option go_package = "github.com/poy-web3/protos/ai_account_service";
 
 enum ERR_CODE_AI_ACCOUNT_SERVICE {
     CODE_NO_ERROR = 0;
@@ -17,7 +17,7 @@ message AIAccountRegisterRequest {
 
 message AIAccountRegisterResponse {
     AIAccountRspHeader header = 1;
-    string YID = 2;
+    string yid = 2;
     repeated string face_ids = 3;
 }
 
@@ -27,12 +27,12 @@ message AIAccountRecoverRequest {
 
 message AIAccountRecoverResponse {
     AIAccountRspHeader header = 1;
-    string YID = 2;
+    string yid = 2;
 }
 
 message AIAccountRefreshTokenRequest {
     repeated bytes facial_images = 1;
-    string YID = 2;
+    string yid = 2;
 }
 
 message AIAccountRefreshTokenResponse {

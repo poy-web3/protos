@@ -4,7 +4,7 @@
 // - protoc             v4.25.0
 // source: token_generate.proto
 
-package token_generate
+package token_generate_service
 
 import (
 	context "context"
