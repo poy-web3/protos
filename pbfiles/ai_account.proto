@@ -17,7 +17,6 @@ message AIAccountRegisterRequest {
 
 message AIAccountRegisterResponse {
     AIAccountRspHeader header = 1;
-    string yid = 2;
     repeated string face_ids = 3;
 }
 
@@ -27,18 +26,17 @@ message AIAccountRecoverRequest {
 
 message AIAccountRecoverResponse {
     AIAccountRspHeader header = 1;
-    string yid = 2;
+    repeated string face_ids = 2; // matched face ids
 }
 
 message AIAccountRefreshTokenRequest {
     repeated bytes facial_images = 1;
-    string yid = 2;
+    repeated string face_s3_keys = 2;
 }
 
 message AIAccountRefreshTokenResponse {
     AIAccountRspHeader header = 1;
     repeated string face_ids = 3;
-    repeated string prev_face_ids = 4;
 }
 
 message AIAccountRspHeader {
