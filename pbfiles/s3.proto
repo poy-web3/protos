@@ -13,12 +13,12 @@ message UploadConstImageResponse {
 }
 
 message UploadIndexImageRequest {
-	map<string, bytes> faceid_image = 1;
+	map<string, bytes> face_id_to_image = 1;
 	string yid = 2;
 }
 
 message UpdateIndexImageRequest {
-	string faceId = 1;
+	string face_id = 1;
 	bytes image = 2;
 	string yid = 3;
 }
@@ -30,14 +30,24 @@ message UploadIndexImageResponse {
 
 message UpdateIndexImageResponse {
 	bool succ = 1;
-	string deleted_faceid = 2;
+	string deleted_face_id = 2;
 	string error_message = 3;
+}
+
+message GetUserFacesRequest {
+	string yid = 1;
+}
+
+message GetUserFacesResponse {
+	repeated string face_ids = 1;
+	string error_message = 2;
 }
 
 service S3 {
     rpc UploadConstImage(UploadConstImageRequest) returns (UploadConstImageResponse);
 	rpc UploadIndexImage(UploadIndexImageRequest) returns (UploadIndexImageResponse);
 	rpc UpdateIndexImage(UpdateIndexImageRequest) returns (UpdateIndexImageResponse);
+	rpc GetUserFacesByYID(GetUserFacesRequest) returns (GetUserFacesResponse);
 }
 
 // protoc --proto_path=. --go_out=../s3_service --go_opt=paths=source_relative --go-grpc_out=../s3_service --go-grpc_opt=paths=source_relative s3.proto

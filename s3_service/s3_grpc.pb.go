@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	S3_UploadConstImage_FullMethodName = "/S3/UploadConstImage"
-	S3_UploadIndexImage_FullMethodName = "/S3/UploadIndexImage"
-	S3_UpdateIndexImage_FullMethodName = "/S3/UpdateIndexImage"
+	S3_UploadConstImage_FullMethodName  = "/S3/UploadConstImage"
+	S3_UploadIndexImage_FullMethodName  = "/S3/UploadIndexImage"
+	S3_UpdateIndexImage_FullMethodName  = "/S3/UpdateIndexImage"
+	S3_GetUserFacesByYID_FullMethodName = "/S3/GetUserFacesByYID"
 )
 
 // S3Client is the client API for S3 service.
@@ -31,6 +32,7 @@ type S3Client interface {
 	UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*UploadConstImageResponse, error)
 	UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*UploadIndexImageResponse, error)
 	UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*UpdateIndexImageResponse, error)
+	GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponse, error)
 }
 
 type s3Client struct {
@@ -68,6 +70,15 @@ func (c *s3Client) UpdateIndexImage(ctx context.Context, in *UpdateIndexImageReq
 	return out, nil
 }
 
+func (c *s3Client) GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponse, error) {
+	out := new(GetUserFacesResponse)
+	err := c.cc.Invoke(ctx, S3_GetUserFacesByYID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // S3Server is the server API for S3 service.
 // All implementations must embed UnimplementedS3Server
 // for forward compatibility
@@ -75,6 +86,7 @@ type S3Server interface {
 	UploadConstImage(context.Context, *UploadConstImageRequest) (*UploadConstImageResponse, error)
 	UploadIndexImage(context.Context, *UploadIndexImageRequest) (*UploadIndexImageResponse, error)
 	UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*UpdateIndexImageResponse, error)
+	GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponse, error)
 	mustEmbedUnimplementedS3Server()
 }
 
@@ -90,6 +102,9 @@ func (UnimplementedS3Server) UploadIndexImage(context.Context, *UploadIndexImage
 }
 func (UnimplementedS3Server) UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*UpdateIndexImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateIndexImage not implemented")
+}
+func (UnimplementedS3Server) GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserFacesByYID not implemented")
 }
 func (UnimplementedS3Server) mustEmbedUnimplementedS3Server() {}
 
@@ -158,6 +173,24 @@ func _S3_UpdateIndexImage_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _S3_GetUserFacesByYID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserFacesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(S3Server).GetUserFacesByYID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: S3_GetUserFacesByYID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(S3Server).GetUserFacesByYID(ctx, req.(*GetUserFacesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // S3_ServiceDesc is the grpc.ServiceDesc for S3 service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +209,10 @@ var S3_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateIndexImage",
 			Handler:    _S3_UpdateIndexImage_Handler,
+		},
+		{
+			MethodName: "GetUserFacesByYID",
+			Handler:    _S3_GetUserFacesByYID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
