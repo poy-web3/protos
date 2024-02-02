@@ -13,9 +13,10 @@ message UploadIndexImageRequest {
 }
 
 message UpdateIndexImageRequest {
-	string new_face_id = 1;
-	bytes new_face_image = 2;
-	string deleted_image_s3_key = 3;
+	string yid = 1;
+	string new_face_id = 2;
+	bytes new_face_image = 3;
+	string deleted_image_s3_key = 4;
 }
 
 message CommonResponse {
