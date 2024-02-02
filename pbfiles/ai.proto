@@ -21,7 +21,7 @@ message RecoverResponse {
 }
 
 message RefreshTokenRequest {
-    repeated bytes facial_image = 1;
+    bytes facial_image = 1;
     repeated string face_s3_keys = 2;
 }
 
