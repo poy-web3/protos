@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option go_package = "github.com/poy-web3/protos/ai_service";
+
+message RegisterRequest {
+    repeated bytes facial_images = 1;
+}
+
+message RegisterResponse {
+    RspHeader header = 1;
+    repeated string face_ids = 2;
+}
+
+message RecoverRequest {
+    repeated bytes facial_images = 1;
+}
+
+message RecoverResponse {
+    RspHeader header = 1;
+    repeated string face_ids = 2; // matched face ids
+}
+
+message RefreshTokenRequest {
+    repeated bytes facial_image = 1;
+    repeated string face_s3_keys = 2;
+}
+
+message RefreshTokenResponse {
+    RspHeader header = 1;
+    string new_face_id = 2;
+    string delete_face_id = 3;
+}
+
+message RspHeader {
+    bool succ = 1;
+    string error_message = 2;
+}
+
+service AIAccount {
+    rpc RegisterAccount(RegisterRequest) returns (RegisterResponse);
+    rpc RecoverAccount(RecoverRequest) returns (RecoverResponse);
+    rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+}
+
+// protoc --proto_path=. --go_out=../ai_service --go_opt=paths=source_relative --go-grpc_out=../ai_service --go-grpc_opt=paths=source_relative ai.proto
