@@ -30,7 +30,7 @@ const (
 type S3Client interface {
 	UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*S3Response, error)
 	UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*S3Response, error)
-	UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*S3Response, error)
+	UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*UpdateIndexImageResponse, error)
 }
 
 type s3Client struct {
@@ -59,8 +59,8 @@ func (c *s3Client) UploadIndexImage(ctx context.Context, in *UploadIndexImageReq
 	return out, nil
 }
 
-func (c *s3Client) UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*S3Response, error) {
-	out := new(S3Response)
+func (c *s3Client) UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*UpdateIndexImageResponse, error) {
+	out := new(UpdateIndexImageResponse)
 	err := c.cc.Invoke(ctx, S3_UpdateIndexImage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (c *s3Client) UpdateIndexImage(ctx context.Context, in *UpdateIndexImageReq
 type S3Server interface {
 	UploadConstImage(context.Context, *UploadConstImageRequest) (*S3Response, error)
 	UploadIndexImage(context.Context, *UploadIndexImageRequest) (*S3Response, error)
-	UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*S3Response, error)
+	UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*UpdateIndexImageResponse, error)
 	mustEmbedUnimplementedS3Server()
 }
 
@@ -88,7 +88,7 @@ func (UnimplementedS3Server) UploadConstImage(context.Context, *UploadConstImage
 func (UnimplementedS3Server) UploadIndexImage(context.Context, *UploadIndexImageRequest) (*S3Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadIndexImage not implemented")
 }
-func (UnimplementedS3Server) UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*S3Response, error) {
+func (UnimplementedS3Server) UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*UpdateIndexImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateIndexImage not implemented")
 }
 func (UnimplementedS3Server) mustEmbedUnimplementedS3Server() {}
