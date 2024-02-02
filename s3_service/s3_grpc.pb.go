@@ -28,8 +28,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type S3Client interface {
-	UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*S3Response, error)
-	UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*S3Response, error)
+	UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*UploadConstImageResponse, error)
+	UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*UploadIndexImageResponse, error)
 	UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*UpdateIndexImageResponse, error)
 }
 
@@ -41,8 +41,8 @@ func NewS3Client(cc grpc.ClientConnInterface) S3Client {
 	return &s3Client{cc}
 }
 
-func (c *s3Client) UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*S3Response, error) {
-	out := new(S3Response)
+func (c *s3Client) UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*UploadConstImageResponse, error) {
+	out := new(UploadConstImageResponse)
 	err := c.cc.Invoke(ctx, S3_UploadConstImage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -50,8 +50,8 @@ func (c *s3Client) UploadConstImage(ctx context.Context, in *UploadConstImageReq
 	return out, nil
 }
 
-func (c *s3Client) UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*S3Response, error) {
-	out := new(S3Response)
+func (c *s3Client) UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*UploadIndexImageResponse, error) {
+	out := new(UploadIndexImageResponse)
 	err := c.cc.Invoke(ctx, S3_UploadIndexImage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -72,8 +72,8 @@ func (c *s3Client) UpdateIndexImage(ctx context.Context, in *UpdateIndexImageReq
 // All implementations must embed UnimplementedS3Server
 // for forward compatibility
 type S3Server interface {
-	UploadConstImage(context.Context, *UploadConstImageRequest) (*S3Response, error)
-	UploadIndexImage(context.Context, *UploadIndexImageRequest) (*S3Response, error)
+	UploadConstImage(context.Context, *UploadConstImageRequest) (*UploadConstImageResponse, error)
+	UploadIndexImage(context.Context, *UploadIndexImageRequest) (*UploadIndexImageResponse, error)
 	UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*UpdateIndexImageResponse, error)
 	mustEmbedUnimplementedS3Server()
 }
@@ -82,10 +82,10 @@ type S3Server interface {
 type UnimplementedS3Server struct {
 }
 
-func (UnimplementedS3Server) UploadConstImage(context.Context, *UploadConstImageRequest) (*S3Response, error) {
+func (UnimplementedS3Server) UploadConstImage(context.Context, *UploadConstImageRequest) (*UploadConstImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadConstImage not implemented")
 }
-func (UnimplementedS3Server) UploadIndexImage(context.Context, *UploadIndexImageRequest) (*S3Response, error) {
+func (UnimplementedS3Server) UploadIndexImage(context.Context, *UploadIndexImageRequest) (*UploadIndexImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadIndexImage not implemented")
 }
 func (UnimplementedS3Server) UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*UpdateIndexImageResponse, error) {

@@ -7,7 +7,7 @@ message UploadConstImageRequest {
 	string yid = 2;
 }
 
-message S3Response {
+message UploadConstImageResponse {
 	bool succ = 1;
 	string error_message = 2;
 }
@@ -23,6 +23,11 @@ message UpdateIndexImageRequest {
 	string yid = 3;
 }
 
+message UploadIndexImageResponse {
+	bool succ = 1;
+	string error_message = 2;
+}
+
 message UpdateIndexImageResponse {
 	bool succ = 1;
 	string deleted_faceid = 2;
@@ -30,8 +35,8 @@ message UpdateIndexImageResponse {
 }
 
 service S3 {
-    rpc UploadConstImage(UploadConstImageRequest) returns (S3Response);
-	rpc UploadIndexImage(UploadIndexImageRequest) returns (S3Response);
+    rpc UploadConstImage(UploadConstImageRequest) returns (UploadConstImageResponse);
+	rpc UploadIndexImage(UploadIndexImageRequest) returns (UploadIndexImageResponse);
 	rpc UpdateIndexImage(UpdateIndexImageRequest) returns (UpdateIndexImageResponse);
 }
 
