@@ -29,9 +29,9 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type S3Client interface {
-	UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*UploadConstImageResponse, error)
-	UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*UploadIndexImageResponse, error)
-	UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*UpdateIndexImageResponse, error)
+	UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*CommonResponse, error)
+	UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*CommonResponse, error)
+	UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*CommonResponse, error)
 	GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponse, error)
 }
 
@@ -43,8 +43,8 @@ func NewS3Client(cc grpc.ClientConnInterface) S3Client {
 	return &s3Client{cc}
 }
 
-func (c *s3Client) UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*UploadConstImageResponse, error) {
-	out := new(UploadConstImageResponse)
+func (c *s3Client) UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
+	out := new(CommonResponse)
 	err := c.cc.Invoke(ctx, S3_UploadConstImage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -52,8 +52,8 @@ func (c *s3Client) UploadConstImage(ctx context.Context, in *UploadConstImageReq
 	return out, nil
 }
 
-func (c *s3Client) UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*UploadIndexImageResponse, error) {
-	out := new(UploadIndexImageResponse)
+func (c *s3Client) UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
+	out := new(CommonResponse)
 	err := c.cc.Invoke(ctx, S3_UploadIndexImage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -61,8 +61,8 @@ func (c *s3Client) UploadIndexImage(ctx context.Context, in *UploadIndexImageReq
 	return out, nil
 }
 
-func (c *s3Client) UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*UpdateIndexImageResponse, error) {
-	out := new(UpdateIndexImageResponse)
+func (c *s3Client) UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
+	out := new(CommonResponse)
 	err := c.cc.Invoke(ctx, S3_UpdateIndexImage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -83,9 +83,9 @@ func (c *s3Client) GetUserFacesByYID(ctx context.Context, in *GetUserFacesReques
 // All implementations must embed UnimplementedS3Server
 // for forward compatibility
 type S3Server interface {
-	UploadConstImage(context.Context, *UploadConstImageRequest) (*UploadConstImageResponse, error)
-	UploadIndexImage(context.Context, *UploadIndexImageRequest) (*UploadIndexImageResponse, error)
-	UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*UpdateIndexImageResponse, error)
+	UploadConstImage(context.Context, *UploadConstImageRequest) (*CommonResponse, error)
+	UploadIndexImage(context.Context, *UploadIndexImageRequest) (*CommonResponse, error)
+	UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*CommonResponse, error)
 	GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponse, error)
 	mustEmbedUnimplementedS3Server()
 }
@@ -94,13 +94,13 @@ type S3Server interface {
 type UnimplementedS3Server struct {
 }
 
-func (UnimplementedS3Server) UploadConstImage(context.Context, *UploadConstImageRequest) (*UploadConstImageResponse, error) {
+func (UnimplementedS3Server) UploadConstImage(context.Context, *UploadConstImageRequest) (*CommonResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadConstImage not implemented")
 }
-func (UnimplementedS3Server) UploadIndexImage(context.Context, *UploadIndexImageRequest) (*UploadIndexImageResponse, error) {
+func (UnimplementedS3Server) UploadIndexImage(context.Context, *UploadIndexImageRequest) (*CommonResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadIndexImage not implemented")
 }
-func (UnimplementedS3Server) UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*UpdateIndexImageResponse, error) {
+func (UnimplementedS3Server) UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*CommonResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateIndexImage not implemented")
 }
 func (UnimplementedS3Server) GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponse, error) {

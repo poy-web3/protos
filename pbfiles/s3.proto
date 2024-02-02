@@ -7,31 +7,20 @@ message UploadConstImageRequest {
 	string yid = 2;
 }
 
-message UploadConstImageResponse {
-	bool succ = 1;
-	string error_message = 2;
-}
-
 message UploadIndexImageRequest {
 	map<string, bytes> face_id_to_image = 1;
 	string yid = 2;
 }
 
 message UpdateIndexImageRequest {
-	string face_id = 1;
-	bytes image = 2;
-	string yid = 3;
+	string new_face_id = 1;
+	bytes new_face_image = 2;
+	string deleted_image_s3_key = 3;
 }
 
-message UploadIndexImageResponse {
+message CommonResponse {
 	bool succ = 1;
 	string error_message = 2;
-}
-
-message UpdateIndexImageResponse {
-	bool succ = 1;
-	string deleted_face_id = 2;
-	string error_message = 3;
 }
 
 message GetUserFacesRequest {
@@ -39,14 +28,14 @@ message GetUserFacesRequest {
 }
 
 message GetUserFacesResponse {
-	repeated string face_ids = 1;
+	repeated string s3_keys = 1;
 	string error_message = 2;
 }
 
 service S3 {
-    rpc UploadConstImage(UploadConstImageRequest) returns (UploadConstImageResponse);
-	rpc UploadIndexImage(UploadIndexImageRequest) returns (UploadIndexImageResponse);
-	rpc UpdateIndexImage(UpdateIndexImageRequest) returns (UpdateIndexImageResponse);
+    rpc UploadConstImage(UploadConstImageRequest) returns (CommonResponse);
+	rpc UploadIndexImage(UploadIndexImageRequest) returns (CommonResponse);
+	rpc UpdateIndexImage(UpdateIndexImageRequest) returns (CommonResponse);
 	rpc GetUserFacesByYID(GetUserFacesRequest) returns (GetUserFacesResponse);
 }
 
