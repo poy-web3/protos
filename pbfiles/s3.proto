@@ -18,8 +18,9 @@ message UploadIndexImageRequest {
 }
 
 message UpdateIndexImageRequest {
-	map<string, bytes> faceid_image = 1;
-	string yid = 2;
+	string faceId = 1;
+	bytes image = 2;
+	string yid = 3;
 }
 
 service S3 {
