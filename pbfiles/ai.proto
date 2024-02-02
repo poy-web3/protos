@@ -36,7 +36,7 @@ message RspHeader {
     string error_message = 2;
 }
 
-service AIAccount {
+service AI {
     rpc RegisterAccount(RegisterRequest) returns (RegisterResponse);
     rpc RecoverAccount(RecoverRequest) returns (RecoverResponse);
     rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
