@@ -23,7 +23,7 @@ message Token {
 message GenerateTokenResponse {
     TokenGenerateRspHeader header = 1;
     Token token = 2;
-    string token_signature = 3;
+    bytes token_signature = 3;
 }
 
 message TokenGenerateRspHeader {
