@@ -18,7 +18,7 @@ message GenerateTokenRequest {
 message Token {
     string associate_account = 1;
     string yid = 2;
-    int64 expire_height = 3;
+    uint64 expire_height = 3;
 }
 
 message GenerateTokenResponse {
