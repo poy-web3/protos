@@ -39,7 +39,8 @@ message GetConstImageRequest {
 
 message GetConstImageResponse {
 	bool Succ = 1;
-	bytes image = 2;
+	string error_message = 2;
+	bytes image = 3;
 }
 
 service S3 {
