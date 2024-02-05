@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	TokenGenerateService_GenerateToken_FullMethodName = "/TokenGenerateService/GenerateToken"
+	TokenGenerateService_VerifyToken_FullMethodName   = "/TokenGenerateService/VerifyToken"
 )
 
 // TokenGenerateServiceClient is the client API for TokenGenerateService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TokenGenerateServiceClient interface {
 	GenerateToken(ctx context.Context, in *GenerateTokenRequest, opts ...grpc.CallOption) (*GenerateTokenResponse, error)
+	VerifyToken(ctx context.Context, in *VerifyTokenRequest, opts ...grpc.CallOption) (*VerifyTokenResponse, error)
 }
 
 type tokenGenerateServiceClient struct {
@@ -46,11 +48,21 @@ func (c *tokenGenerateServiceClient) GenerateToken(ctx context.Context, in *Gene
 	return out, nil
 }
 
+func (c *tokenGenerateServiceClient) VerifyToken(ctx context.Context, in *VerifyTokenRequest, opts ...grpc.CallOption) (*VerifyTokenResponse, error) {
+	out := new(VerifyTokenResponse)
+	err := c.cc.Invoke(ctx, TokenGenerateService_VerifyToken_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TokenGenerateServiceServer is the server API for TokenGenerateService service.
 // All implementations must embed UnimplementedTokenGenerateServiceServer
 // for forward compatibility
 type TokenGenerateServiceServer interface {
 	GenerateToken(context.Context, *GenerateTokenRequest) (*GenerateTokenResponse, error)
+	VerifyToken(context.Context, *VerifyTokenRequest) (*VerifyTokenResponse, error)
 	mustEmbedUnimplementedTokenGenerateServiceServer()
 }
 
@@ -60,6 +72,9 @@ type UnimplementedTokenGenerateServiceServer struct {
 
 func (UnimplementedTokenGenerateServiceServer) GenerateToken(context.Context, *GenerateTokenRequest) (*GenerateTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
+}
+func (UnimplementedTokenGenerateServiceServer) VerifyToken(context.Context, *VerifyTokenRequest) (*VerifyTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyToken not implemented")
 }
 func (UnimplementedTokenGenerateServiceServer) mustEmbedUnimplementedTokenGenerateServiceServer() {}
 
@@ -92,6 +107,24 @@ func _TokenGenerateService_GenerateToken_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TokenGenerateService_VerifyToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TokenGenerateServiceServer).VerifyToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TokenGenerateService_VerifyToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TokenGenerateServiceServer).VerifyToken(ctx, req.(*VerifyTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TokenGenerateService_ServiceDesc is the grpc.ServiceDesc for TokenGenerateService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +135,10 @@ var TokenGenerateService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GenerateToken",
 			Handler:    _TokenGenerateService_GenerateToken_Handler,
+		},
+		{
+			MethodName: "VerifyToken",
+			Handler:    _TokenGenerateService_VerifyToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

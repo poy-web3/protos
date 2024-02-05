@@ -32,8 +32,19 @@ message TokenGenerateRspHeader {
     string reason = 2;
 }
 
+message VerifyTokenRequest {
+    Token token = 1;
+    bytes token_signature = 2;
+}
+
+message VerifyTokenResponse {
+    bool Succ = 1;
+    string ErrorMsg = 2;
+}
+
 service TokenGenerateService {
     rpc GenerateToken(GenerateTokenRequest) returns (GenerateTokenResponse);
+    rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse);
 }
 
 // protoc --proto_path=. --go_out=../token_generate_service --go_opt=paths=source_relative --go-grpc_out=../token_generate_service --go-grpc_opt=paths=source_relative token_generate.proto
