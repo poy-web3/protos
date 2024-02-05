@@ -33,11 +33,21 @@ message GetUserFacesResponse {
 	string error_message = 2;
 }
 
+message GetConstImageRequest {
+	string yid = 1;
+}
+
+message GetConstImageResponse {
+	bool Succ = 1;
+	bytes image = 2;
+}
+
 service S3 {
     rpc UploadConstImage(UploadConstImageRequest) returns (CommonResponse);
 	rpc UploadIndexImage(UploadIndexImageRequest) returns (CommonResponse);
 	rpc UpdateIndexImage(UpdateIndexImageRequest) returns (CommonResponse);
 	rpc GetUserFacesByYID(GetUserFacesRequest) returns (GetUserFacesResponse);
+	rpc GetConstImageByYID(GetConstImageRequest) returns (GetConstImageResponse);
 }
 
 // protoc --proto_path=. --go_out=../s3_service --go_opt=paths=source_relative --go-grpc_out=../s3_service --go-grpc_opt=paths=source_relative s3.proto
