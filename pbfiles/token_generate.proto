@@ -12,6 +12,7 @@ enum ERR_CODE_TOKEN_GENERATE_SERVICE {
 message GenerateTokenRequest {
     string wallet_account = 1;
     string yid = 2;
+    uint64 curHeight = 3;
 }
 
 message Token {
