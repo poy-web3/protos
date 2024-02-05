@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "github.com/poy-web3/protos/token_generate_service";
+option go_package = "github.com/poy-web3/protos/token_service";
 
-enum ERR_CODE_TOKEN_GENERATE_SERVICE {
+enum ERR_CODE {
     CODE_NO_ERROR = 0;
     CODE_ERR_MISSING_PARAM = -1;
     CODE_ERR_INVALID_PARAM = -2;
@@ -42,9 +42,9 @@ message VerifyTokenResponse {
     string ErrorMsg = 2;
 }
 
-service TokenGenerateService {
+service UBIToken {
     rpc GenerateToken(GenerateTokenRequest) returns (GenerateTokenResponse);
     rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse);
 }
 
-// protoc --proto_path=. --go_out=../token_generate_service --go_opt=paths=source_relative --go-grpc_out=../token_generate_service --go-grpc_opt=paths=source_relative token_generate.proto
+// protoc --proto_path=. --go_out=../token_service --go_opt=paths=source_relative --go-grpc_out=../token_service --go-grpc_opt=paths=source_relative token.proto
