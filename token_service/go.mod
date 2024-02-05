@@ -1,4 +1,4 @@
-module github.com/poy-web3/protos/token_generate_service
+module github.com/poy-web3/protos/token_service
 
 go 1.20
 
