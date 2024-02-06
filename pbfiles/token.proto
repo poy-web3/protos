@@ -17,7 +17,7 @@ message GenerateTokenRequest {
 
 message GenerateTokenResponse {
     TokenGenerateRspHeader header = 1;
-    string token = 2;
+    bytes token = 2;
     bytes token_signature = 3;
 }
 
@@ -27,7 +27,7 @@ message TokenGenerateRspHeader {
 }
 
 message VerifyTokenRequest {
-    string token = 1;
+    bytes token = 1;
     bytes token_signature = 2;
 }
 
