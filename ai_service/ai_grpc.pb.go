@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	AI_RegisterAccount_FullMethodName = "/AI/RegisterAccount"
-	AI_RecoverAccount_FullMethodName  = "/AI/RecoverAccount"
-	AI_RefreshToken_FullMethodName    = "/AI/RefreshToken"
+	AI_RegisterAccount_FullMethodName        = "/AI/RegisterAccount"
+	AI_RecoverAccount_FullMethodName         = "/AI/RecoverAccount"
+	AI_RefreshToken_FullMethodName           = "/AI/RefreshToken"
+	AI_DeleteFacesForRollback_FullMethodName = "/AI/DeleteFacesForRollback"
 )
 
 // AIClient is the client API for AI service.
@@ -31,6 +32,7 @@ type AIClient interface {
 	RegisterAccount(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 	RecoverAccount(ctx context.Context, in *RecoverRequest, opts ...grpc.CallOption) (*RecoverResponse, error)
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error)
+	DeleteFacesForRollback(ctx context.Context, in *RollbackRequest, opts ...grpc.CallOption) (*RollbackResponse, error)
 }
 
 type aIClient struct {
@@ -68,6 +70,15 @@ func (c *aIClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, op
 	return out, nil
 }
 
+func (c *aIClient) DeleteFacesForRollback(ctx context.Context, in *RollbackRequest, opts ...grpc.CallOption) (*RollbackResponse, error) {
+	out := new(RollbackResponse)
+	err := c.cc.Invoke(ctx, AI_DeleteFacesForRollback_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AIServer is the server API for AI service.
 // All implementations must embed UnimplementedAIServer
 // for forward compatibility
@@ -75,6 +86,7 @@ type AIServer interface {
 	RegisterAccount(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	RecoverAccount(context.Context, *RecoverRequest) (*RecoverResponse, error)
 	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error)
+	DeleteFacesForRollback(context.Context, *RollbackRequest) (*RollbackResponse, error)
 	mustEmbedUnimplementedAIServer()
 }
 
@@ -90,6 +102,9 @@ func (UnimplementedAIServer) RecoverAccount(context.Context, *RecoverRequest) (*
 }
 func (UnimplementedAIServer) RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
+}
+func (UnimplementedAIServer) DeleteFacesForRollback(context.Context, *RollbackRequest) (*RollbackResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteFacesForRollback not implemented")
 }
 func (UnimplementedAIServer) mustEmbedUnimplementedAIServer() {}
 
@@ -158,6 +173,24 @@ func _AI_RefreshToken_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AI_DeleteFacesForRollback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RollbackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AIServer).DeleteFacesForRollback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AI_DeleteFacesForRollback_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AIServer).DeleteFacesForRollback(ctx, req.(*RollbackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AI_ServiceDesc is the grpc.ServiceDesc for AI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +209,10 @@ var AI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RefreshToken",
 			Handler:    _AI_RefreshToken_Handler,
+		},
+		{
+			MethodName: "DeleteFacesForRollback",
+			Handler:    _AI_DeleteFacesForRollback_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
