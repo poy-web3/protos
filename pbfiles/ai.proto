@@ -50,6 +50,7 @@ message RegisterWithoutCheckRequest {
 
 message RegisterWithoutCheckResponse {
     RspHeader header = 1;
+    repeated string face_ids = 2;
 }
 
 service AI {
