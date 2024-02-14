@@ -44,10 +44,19 @@ message RegisterRollbackResponse {
     RspHeader header = 1;
 }
 
+message RegisterWithoutCheckRequest {
+    repeated bytes facial_images = 1;
+}
+
+message RegisterWithoutCheckResponse {
+    RspHeader header = 1;
+}
+
 service AI {
     rpc RegisterAccount(RegisterRequest) returns (RegisterResponse);
     rpc RecoverAccount(RecoverRequest) returns (RecoverResponse);
     rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+    rpc RegisterWithoutCheck(RegisterWithoutCheckRequest) returns (RegisterWithoutCheckResponse);
     rpc RegisterRollBack(RegisterRollbackRequest) returns (RegisterRollbackResponse);
 }
 

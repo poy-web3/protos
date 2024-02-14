@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	AI_RegisterAccount_FullMethodName  = "/AI/RegisterAccount"
-	AI_RecoverAccount_FullMethodName   = "/AI/RecoverAccount"
-	AI_RefreshToken_FullMethodName     = "/AI/RefreshToken"
-	AI_RegisterRollBack_FullMethodName = "/AI/RegisterRollBack"
+	AI_RegisterAccount_FullMethodName      = "/AI/RegisterAccount"
+	AI_RecoverAccount_FullMethodName       = "/AI/RecoverAccount"
+	AI_RefreshToken_FullMethodName         = "/AI/RefreshToken"
+	AI_RegisterWithoutCheck_FullMethodName = "/AI/RegisterWithoutCheck"
+	AI_RegisterRollBack_FullMethodName     = "/AI/RegisterRollBack"
 )
 
 // AIClient is the client API for AI service.
@@ -32,6 +33,7 @@ type AIClient interface {
 	RegisterAccount(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 	RecoverAccount(ctx context.Context, in *RecoverRequest, opts ...grpc.CallOption) (*RecoverResponse, error)
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error)
+	RegisterWithoutCheck(ctx context.Context, in *RegisterWithoutCheckRequest, opts ...grpc.CallOption) (*RegisterWithoutCheckResponse, error)
 	RegisterRollBack(ctx context.Context, in *RegisterRollbackRequest, opts ...grpc.CallOption) (*RegisterRollbackResponse, error)
 }
 
@@ -70,6 +72,15 @@ func (c *aIClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, op
 	return out, nil
 }
 
+func (c *aIClient) RegisterWithoutCheck(ctx context.Context, in *RegisterWithoutCheckRequest, opts ...grpc.CallOption) (*RegisterWithoutCheckResponse, error) {
+	out := new(RegisterWithoutCheckResponse)
+	err := c.cc.Invoke(ctx, AI_RegisterWithoutCheck_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *aIClient) RegisterRollBack(ctx context.Context, in *RegisterRollbackRequest, opts ...grpc.CallOption) (*RegisterRollbackResponse, error) {
 	out := new(RegisterRollbackResponse)
 	err := c.cc.Invoke(ctx, AI_RegisterRollBack_FullMethodName, in, out, opts...)
@@ -86,6 +97,7 @@ type AIServer interface {
 	RegisterAccount(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	RecoverAccount(context.Context, *RecoverRequest) (*RecoverResponse, error)
 	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error)
+	RegisterWithoutCheck(context.Context, *RegisterWithoutCheckRequest) (*RegisterWithoutCheckResponse, error)
 	RegisterRollBack(context.Context, *RegisterRollbackRequest) (*RegisterRollbackResponse, error)
 	mustEmbedUnimplementedAIServer()
 }
@@ -102,6 +114,9 @@ func (UnimplementedAIServer) RecoverAccount(context.Context, *RecoverRequest) (*
 }
 func (UnimplementedAIServer) RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
+}
+func (UnimplementedAIServer) RegisterWithoutCheck(context.Context, *RegisterWithoutCheckRequest) (*RegisterWithoutCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterWithoutCheck not implemented")
 }
 func (UnimplementedAIServer) RegisterRollBack(context.Context, *RegisterRollbackRequest) (*RegisterRollbackResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterRollBack not implemented")
@@ -173,6 +188,24 @@ func _AI_RefreshToken_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AI_RegisterWithoutCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterWithoutCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AIServer).RegisterWithoutCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AI_RegisterWithoutCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AIServer).RegisterWithoutCheck(ctx, req.(*RegisterWithoutCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AI_RegisterRollBack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RegisterRollbackRequest)
 	if err := dec(in); err != nil {
@@ -209,6 +242,10 @@ var AI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RefreshToken",
 			Handler:    _AI_RefreshToken_Handler,
+		},
+		{
+			MethodName: "RegisterWithoutCheck",
+			Handler:    _AI_RegisterWithoutCheck_Handler,
 		},
 		{
 			MethodName: "RegisterRollBack",
