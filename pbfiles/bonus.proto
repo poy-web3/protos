@@ -23,6 +23,6 @@ message BonusRspHeader {
     string reason = 2;
 }
 
-service AIAccountService {
+service BonusService {
     rpc GetBonus(BonusRequest) returns (BonusResponse);
 }

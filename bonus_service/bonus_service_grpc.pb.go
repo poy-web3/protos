@@ -19,89 +19,89 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	AIAccountService_GetBonus_FullMethodName = "/AIAccountService/GetBonus"
+	BonusService_GetBonus_FullMethodName = "/BonusService/GetBonus"
 )
 
-// AIAccountServiceClient is the client API for AIAccountService service.
+// BonusServiceClient is the client API for BonusService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type AIAccountServiceClient interface {
+type BonusServiceClient interface {
 	GetBonus(ctx context.Context, in *BonusRequest, opts ...grpc.CallOption) (*BonusResponse, error)
 }
 
-type aIAccountServiceClient struct {
+type bonusServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAIAccountServiceClient(cc grpc.ClientConnInterface) AIAccountServiceClient {
-	return &aIAccountServiceClient{cc}
+func NewBonusServiceClient(cc grpc.ClientConnInterface) BonusServiceClient {
+	return &bonusServiceClient{cc}
 }
 
-func (c *aIAccountServiceClient) GetBonus(ctx context.Context, in *BonusRequest, opts ...grpc.CallOption) (*BonusResponse, error) {
+func (c *bonusServiceClient) GetBonus(ctx context.Context, in *BonusRequest, opts ...grpc.CallOption) (*BonusResponse, error) {
 	out := new(BonusResponse)
-	err := c.cc.Invoke(ctx, AIAccountService_GetBonus_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, BonusService_GetBonus_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AIAccountServiceServer is the server API for AIAccountService service.
-// All implementations must embed UnimplementedAIAccountServiceServer
+// BonusServiceServer is the server API for BonusService service.
+// All implementations must embed UnimplementedBonusServiceServer
 // for forward compatibility
-type AIAccountServiceServer interface {
+type BonusServiceServer interface {
 	GetBonus(context.Context, *BonusRequest) (*BonusResponse, error)
-	mustEmbedUnimplementedAIAccountServiceServer()
+	mustEmbedUnimplementedBonusServiceServer()
 }
 
-// UnimplementedAIAccountServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedAIAccountServiceServer struct {
+// UnimplementedBonusServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedBonusServiceServer struct {
 }
 
-func (UnimplementedAIAccountServiceServer) GetBonus(context.Context, *BonusRequest) (*BonusResponse, error) {
+func (UnimplementedBonusServiceServer) GetBonus(context.Context, *BonusRequest) (*BonusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBonus not implemented")
 }
-func (UnimplementedAIAccountServiceServer) mustEmbedUnimplementedAIAccountServiceServer() {}
+func (UnimplementedBonusServiceServer) mustEmbedUnimplementedBonusServiceServer() {}
 
-// UnsafeAIAccountServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AIAccountServiceServer will
+// UnsafeBonusServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BonusServiceServer will
 // result in compilation errors.
-type UnsafeAIAccountServiceServer interface {
-	mustEmbedUnimplementedAIAccountServiceServer()
+type UnsafeBonusServiceServer interface {
+	mustEmbedUnimplementedBonusServiceServer()
 }
 
-func RegisterAIAccountServiceServer(s grpc.ServiceRegistrar, srv AIAccountServiceServer) {
-	s.RegisterService(&AIAccountService_ServiceDesc, srv)
+func RegisterBonusServiceServer(s grpc.ServiceRegistrar, srv BonusServiceServer) {
+	s.RegisterService(&BonusService_ServiceDesc, srv)
 }
 
-func _AIAccountService_GetBonus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _BonusService_GetBonus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BonusRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AIAccountServiceServer).GetBonus(ctx, in)
+		return srv.(BonusServiceServer).GetBonus(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AIAccountService_GetBonus_FullMethodName,
+		FullMethod: BonusService_GetBonus_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AIAccountServiceServer).GetBonus(ctx, req.(*BonusRequest))
+		return srv.(BonusServiceServer).GetBonus(ctx, req.(*BonusRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// AIAccountService_ServiceDesc is the grpc.ServiceDesc for AIAccountService service.
+// BonusService_ServiceDesc is the grpc.ServiceDesc for BonusService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var AIAccountService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "AIAccountService",
-	HandlerType: (*AIAccountServiceServer)(nil),
+var BonusService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "BonusService",
+	HandlerType: (*BonusServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetBonus",
-			Handler:    _AIAccountService_GetBonus_Handler,
+			Handler:    _BonusService_GetBonus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
