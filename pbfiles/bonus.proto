@@ -25,3 +25,5 @@ message BonusRspHeader {
 service Bonus {
 	rpc GetReferBonus(ReferBonusRequest) returns (BonusResponse);
 }
+
+// protoc --proto_path=. --go_out=../bonus_service --go_opt=paths=source_relative --go-grpc_out=../bonus_service --go-grpc_opt=paths=source_relative bonus.proto
