@@ -13,6 +13,8 @@ message GenerateTokenRequest {
     string wallet_account = 1;
     string yid = 2;
     uint64 curHeight = 3;
+    int32 tier = 4;
+    string referer = 5;
 }
 
 message GenerateTokenResponse {
