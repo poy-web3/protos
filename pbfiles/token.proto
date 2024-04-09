@@ -15,7 +15,7 @@ message GenerateTokenRequest {
     uint64 current_height = 3;
     int32 tier = 4;
     string referer = 5;
-    uint64 join_height = 6;
+    int64 join_date = 6;
 }
 
 message GenerateTokenResponse {
@@ -44,4 +44,4 @@ service UBIToken {
     rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse);
 }
 
-// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative token.proto
+// protoc --proto_path=. --go_out=../token_service --go_opt=paths=source_relative --go-grpc_out=../token_service --go-grpc_opt=paths=source_relative token.proto
