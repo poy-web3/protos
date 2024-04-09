@@ -45,6 +45,7 @@ message GetConstImageResponse {
 
 message DeleteImagesRequest {
 	string yid = 1;
+	repeated string faceIds = 2;
 }
 
 message DeleteImagesResponse {
