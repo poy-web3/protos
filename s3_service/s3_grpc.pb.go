@@ -24,6 +24,7 @@ const (
 	S3_UpdateIndexImage_FullMethodName   = "/S3/UpdateIndexImage"
 	S3_GetUserFacesByYID_FullMethodName  = "/S3/GetUserFacesByYID"
 	S3_GetConstImageByYID_FullMethodName = "/S3/GetConstImageByYID"
+	S3_DeleteImagesByYID_FullMethodName  = "/S3/DeleteImagesByYID"
 )
 
 // S3Client is the client API for S3 service.
@@ -35,6 +36,7 @@ type S3Client interface {
 	UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*CommonResponse, error)
 	GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponse, error)
 	GetConstImageByYID(ctx context.Context, in *GetConstImageRequest, opts ...grpc.CallOption) (*GetConstImageResponse, error)
+	DeleteImagesByYID(ctx context.Context, in *DeleteImagesRequest, opts ...grpc.CallOption) (*DeleteImagesResponse, error)
 }
 
 type s3Client struct {
@@ -90,6 +92,15 @@ func (c *s3Client) GetConstImageByYID(ctx context.Context, in *GetConstImageRequ
 	return out, nil
 }
 
+func (c *s3Client) DeleteImagesByYID(ctx context.Context, in *DeleteImagesRequest, opts ...grpc.CallOption) (*DeleteImagesResponse, error) {
+	out := new(DeleteImagesResponse)
+	err := c.cc.Invoke(ctx, S3_DeleteImagesByYID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // S3Server is the server API for S3 service.
 // All implementations must embed UnimplementedS3Server
 // for forward compatibility
@@ -99,6 +110,7 @@ type S3Server interface {
 	UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*CommonResponse, error)
 	GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponse, error)
 	GetConstImageByYID(context.Context, *GetConstImageRequest) (*GetConstImageResponse, error)
+	DeleteImagesByYID(context.Context, *DeleteImagesRequest) (*DeleteImagesResponse, error)
 	mustEmbedUnimplementedS3Server()
 }
 
@@ -120,6 +132,9 @@ func (UnimplementedS3Server) GetUserFacesByYID(context.Context, *GetUserFacesReq
 }
 func (UnimplementedS3Server) GetConstImageByYID(context.Context, *GetConstImageRequest) (*GetConstImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConstImageByYID not implemented")
+}
+func (UnimplementedS3Server) DeleteImagesByYID(context.Context, *DeleteImagesRequest) (*DeleteImagesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteImagesByYID not implemented")
 }
 func (UnimplementedS3Server) mustEmbedUnimplementedS3Server() {}
 
@@ -224,6 +239,24 @@ func _S3_GetConstImageByYID_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _S3_DeleteImagesByYID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteImagesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(S3Server).DeleteImagesByYID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: S3_DeleteImagesByYID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(S3Server).DeleteImagesByYID(ctx, req.(*DeleteImagesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // S3_ServiceDesc is the grpc.ServiceDesc for S3 service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -250,6 +283,10 @@ var S3_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetConstImageByYID",
 			Handler:    _S3_GetConstImageByYID_Handler,
+		},
+		{
+			MethodName: "DeleteImagesByYID",
+			Handler:    _S3_DeleteImagesByYID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
