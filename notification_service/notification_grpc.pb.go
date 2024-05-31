@@ -19,14 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	NotificationService_SendNotification_FullMethodName = "/NotificationService/SendNotification"
+	NotificationService_SendEmailNotification_FullMethodName   = "/NotificationService/SendEmailNotification"
+	NotificationService_SendIOSNotification_FullMethodName     = "/NotificationService/SendIOSNotification"
+	NotificationService_SendAndroidNotification_FullMethodName = "/NotificationService/SendAndroidNotification"
 )
 
 // NotificationServiceClient is the client API for NotificationService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NotificationServiceClient interface {
-	SendNotification(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error)
+	SendEmailNotification(ctx context.Context, in *EmailNotificationRequest, opts ...grpc.CallOption) (*EmailNotificationResponse, error)
+	SendIOSNotification(ctx context.Context, in *IOSNotificationRequest, opts ...grpc.CallOption) (*IOSNotificationResponse, error)
+	SendAndroidNotification(ctx context.Context, in *AndroidNotificationRequest, opts ...grpc.CallOption) (*AndroidNotificationResponse, error)
 }
 
 type notificationServiceClient struct {
@@ -37,9 +41,27 @@ func NewNotificationServiceClient(cc grpc.ClientConnInterface) NotificationServi
 	return &notificationServiceClient{cc}
 }
 
-func (c *notificationServiceClient) SendNotification(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error) {
-	out := new(NotificationResponse)
-	err := c.cc.Invoke(ctx, NotificationService_SendNotification_FullMethodName, in, out, opts...)
+func (c *notificationServiceClient) SendEmailNotification(ctx context.Context, in *EmailNotificationRequest, opts ...grpc.CallOption) (*EmailNotificationResponse, error) {
+	out := new(EmailNotificationResponse)
+	err := c.cc.Invoke(ctx, NotificationService_SendEmailNotification_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *notificationServiceClient) SendIOSNotification(ctx context.Context, in *IOSNotificationRequest, opts ...grpc.CallOption) (*IOSNotificationResponse, error) {
+	out := new(IOSNotificationResponse)
+	err := c.cc.Invoke(ctx, NotificationService_SendIOSNotification_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *notificationServiceClient) SendAndroidNotification(ctx context.Context, in *AndroidNotificationRequest, opts ...grpc.CallOption) (*AndroidNotificationResponse, error) {
+	out := new(AndroidNotificationResponse)
+	err := c.cc.Invoke(ctx, NotificationService_SendAndroidNotification_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +72,9 @@ func (c *notificationServiceClient) SendNotification(ctx context.Context, in *No
 // All implementations must embed UnimplementedNotificationServiceServer
 // for forward compatibility
 type NotificationServiceServer interface {
-	SendNotification(context.Context, *NotificationRequest) (*NotificationResponse, error)
+	SendEmailNotification(context.Context, *EmailNotificationRequest) (*EmailNotificationResponse, error)
+	SendIOSNotification(context.Context, *IOSNotificationRequest) (*IOSNotificationResponse, error)
+	SendAndroidNotification(context.Context, *AndroidNotificationRequest) (*AndroidNotificationResponse, error)
 	mustEmbedUnimplementedNotificationServiceServer()
 }
 
@@ -58,8 +82,14 @@ type NotificationServiceServer interface {
 type UnimplementedNotificationServiceServer struct {
 }
 
-func (UnimplementedNotificationServiceServer) SendNotification(context.Context, *NotificationRequest) (*NotificationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendNotification not implemented")
+func (UnimplementedNotificationServiceServer) SendEmailNotification(context.Context, *EmailNotificationRequest) (*EmailNotificationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendEmailNotification not implemented")
+}
+func (UnimplementedNotificationServiceServer) SendIOSNotification(context.Context, *IOSNotificationRequest) (*IOSNotificationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendIOSNotification not implemented")
+}
+func (UnimplementedNotificationServiceServer) SendAndroidNotification(context.Context, *AndroidNotificationRequest) (*AndroidNotificationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendAndroidNotification not implemented")
 }
 func (UnimplementedNotificationServiceServer) mustEmbedUnimplementedNotificationServiceServer() {}
 
@@ -74,20 +104,56 @@ func RegisterNotificationServiceServer(s grpc.ServiceRegistrar, srv Notification
 	s.RegisterService(&NotificationService_ServiceDesc, srv)
 }
 
-func _NotificationService_SendNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(NotificationRequest)
+func _NotificationService_SendEmailNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmailNotificationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NotificationServiceServer).SendNotification(ctx, in)
+		return srv.(NotificationServiceServer).SendEmailNotification(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: NotificationService_SendNotification_FullMethodName,
+		FullMethod: NotificationService_SendEmailNotification_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationServiceServer).SendNotification(ctx, req.(*NotificationRequest))
+		return srv.(NotificationServiceServer).SendEmailNotification(ctx, req.(*EmailNotificationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NotificationService_SendIOSNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IOSNotificationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NotificationServiceServer).SendIOSNotification(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NotificationService_SendIOSNotification_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NotificationServiceServer).SendIOSNotification(ctx, req.(*IOSNotificationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NotificationService_SendAndroidNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AndroidNotificationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NotificationServiceServer).SendAndroidNotification(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NotificationService_SendAndroidNotification_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NotificationServiceServer).SendAndroidNotification(ctx, req.(*AndroidNotificationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -100,8 +166,16 @@ var NotificationService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*NotificationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendNotification",
-			Handler:    _NotificationService_SendNotification_Handler,
+			MethodName: "SendEmailNotification",
+			Handler:    _NotificationService_SendEmailNotification_Handler,
+		},
+		{
+			MethodName: "SendIOSNotification",
+			Handler:    _NotificationService_SendIOSNotification_Handler,
+		},
+		{
+			MethodName: "SendAndroidNotification",
+			Handler:    _NotificationService_SendAndroidNotification_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
