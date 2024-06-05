@@ -1,10 +1,10 @@
-#Install 
+# Install 
 ```sh
 brew install protoc-gen-go
 brew install protoc-gen-go-grpc
 ```
 
-#Usage
+# Usage
 (1) Update the proto file in /pbfiles folder
 (2) Under the same /pbfiles, Run the command and auto generate Go code from your Protocol Buffer files.
 ```sh
