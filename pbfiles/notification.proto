@@ -17,6 +17,7 @@ message EmailNotificationRequest {
 	string email = 1;
 	string title = 2;
 	string body = 3;
+	bool notDryrun = 4;
 }
 
 message IOSNotificationResponse {
@@ -28,7 +29,7 @@ message IOSNotificationRequest {
 	string title = 2;
 	string body = 3;
 	string version = 4;
-	bool dryrun = 5;
+	bool notDryrun = 5;
 }
 
 message AndroidNotificationResponse {
@@ -41,7 +42,7 @@ message AndroidNotificationRequest {
 	string body = 3;
 	string priority = 4;
 	string version = 5;
-	bool dryrun = 6;
+	bool notDryrun = 6;
 }
 
 message NotificationRspHeader {
