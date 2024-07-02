@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "github.com/poy-web3/protos/ambassador_service";
+
+enum ERR_CODE_AMBASSADOR_SERVICE {
+	NO_ERROR = 0;
+	INVALID_PARAM = -1;
+}
+
+message AmbassadorRequest {
+	uint32 inviter = 1;
+	uint32 invitee = 2;
+}
+
+message AmbassadorResponse {
+	AmbassadorRspHeader header = 1;
+}
+
+message AmbassadorRspHeader {
+	int32 ret = 1;
+	string reason = 2;
+}
+
+service Ambassador {
+	rpc AddConnection(AmbassadorRequest) returns (AmbassadorResponse);
+}
+
+// protoc --proto_path=. --go_out=../ambassador_service --go_opt=paths=source_relative --go-grpc_out=../ambassador_service --go-grpc_opt=paths=source_relative ambassador.proto
