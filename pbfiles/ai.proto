@@ -20,6 +20,16 @@ message RecoverResponse {
     repeated string face_ids = 2; // matched face ids
 }
 
+message RecoverRequestV2 {
+    repeated bytes facial_images = 1;
+}
+
+message RecoverResponseV2 {
+    RspHeader header = 1;
+    repeated string face_ids = 2;
+    int32 model_index = 3;
+}
+
 message RefreshTokenRequest {
     bytes facial_image = 1;
     repeated string face_s3_keys = 2;
@@ -56,6 +66,7 @@ message RegisterWithoutCheckResponse {
 service AI {
     rpc RegisterAccount(RegisterRequest) returns (RegisterResponse);
     rpc RecoverAccount(RecoverRequest) returns (RecoverResponse);
+    rpc RecoverAccountV2(RecoverRequestV2) returns (RecoverResponseV2);
     rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
     rpc RegisterWithoutCheck(RegisterWithoutCheckRequest) returns (RegisterWithoutCheckResponse);
     rpc RegisterRollBack(RegisterRollbackRequest) returns (RegisterRollbackResponse);
