@@ -16,6 +16,7 @@ message GenerateTokenRequest {
     int32 tier = 4;
     string referer = 5;
     uint64 join_height = 6;
+    int64 join_date = 7;
 }
 
 message GenerateTokenResponse {
