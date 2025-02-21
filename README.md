@@ -12,7 +12,7 @@ protoc --proto_path=. --go_out=../ai_service --go_opt=paths=source_relative --go
 ```
 (3) Under the GO file folder, remove the go.mod and go.sum and re-generate the dependencies modules file
 ```sh
-go mod init github.com/poy-web3/protos/notification_service
+go mod init github.com/poy-web3/protos/ai_service
 go mod tidy
 ```
 (4) Include all change file in your commit

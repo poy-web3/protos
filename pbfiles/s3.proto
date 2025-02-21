@@ -19,6 +19,20 @@ message UpdateIndexImageRequest {
 	string deleted_image_s3_key = 4;
 }
 
+message UploadIndexImageRequestV2 {
+	map<string, bytes> face_id_to_image = 1;
+	string yid = 2;
+	int32 model_index = 3;
+}
+
+message UpdateIndexImageRequestV2 {
+	string yid = 1;
+	string new_face_id = 2;
+	bytes new_face_image = 3;
+	string deleted_image_s3_key = 4;
+	int32 model_index = 5;
+}
+
 message CommonResponse {
 	bool succ = 1;
 	string error_message = 2;
@@ -47,6 +61,8 @@ service S3 {
     rpc UploadConstImage(UploadConstImageRequest) returns (CommonResponse);
 	rpc UploadIndexImage(UploadIndexImageRequest) returns (CommonResponse);
 	rpc UpdateIndexImage(UpdateIndexImageRequest) returns (CommonResponse);
+	rpc UploadIndexImageV2(UploadIndexImageRequestV2) returns (CommonResponse);
+	rpc UpdateIndexImageV2(UpdateIndexImageRequestV2) returns (CommonResponse);
 	rpc GetUserFacesByYID(GetUserFacesRequest) returns (GetUserFacesResponse);
 	rpc GetConstImageByYID(GetConstImageRequest) returns (GetConstImageResponse);
 }

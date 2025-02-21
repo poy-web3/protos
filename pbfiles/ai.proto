@@ -41,6 +41,18 @@ message RefreshTokenResponse {
     string delete_face_id = 3;
 }
 
+message RefreshTokenRequestV2 {
+    bytes facial_image = 1;
+    repeated string face_s3_keys = 2;
+}
+
+message RefreshTokenResponseV2 {
+    RspHeader header = 1;
+    string new_face_id = 2;
+    string delete_face_id = 3;
+    int32 model_index = 4;
+}
+
 message RspHeader {
     bool succ = 1;
     string error_message = 2;
@@ -68,6 +80,7 @@ service AI {
     rpc RecoverAccount(RecoverRequest) returns (RecoverResponse);
     rpc RecoverAccountV2(RecoverRequestV2) returns (RecoverResponseV2);
     rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+    rpc RefreshTokenV2(RefreshTokenRequestV2) returns (RefreshTokenResponseV2);
     rpc RegisterWithoutCheck(RegisterWithoutCheckRequest) returns (RegisterWithoutCheckResponse);
     rpc RegisterRollBack(RegisterRollbackRequest) returns (RegisterRollbackResponse);
 }
