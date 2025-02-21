@@ -59,8 +59,8 @@ message GetConstImageResponse {
 
 service S3 {
     rpc UploadConstImage(UploadConstImageRequest) returns (CommonResponse);
-	rpc UploadIndexImage(UploadIndexImageRequest) returns (CommonResponse);
-	rpc UpdateIndexImage(UpdateIndexImageRequest) returns (CommonResponse);
+	// rpc UploadIndexImage(UploadIndexImageRequest) returns (CommonResponse);
+	// rpc UpdateIndexImage(UpdateIndexImageRequest) returns (CommonResponse);
 	rpc UploadIndexImageV2(UploadIndexImageRequestV2) returns (CommonResponse);
 	rpc UpdateIndexImageV2(UpdateIndexImageRequestV2) returns (CommonResponse);
 	rpc GetUserFacesByYID(GetUserFacesRequest) returns (GetUserFacesResponse);

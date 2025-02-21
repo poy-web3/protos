@@ -20,8 +20,6 @@ const _ = grpc.SupportPackageIsVersion8
 
 const (
 	S3_UploadConstImage_FullMethodName   = "/S3/UploadConstImage"
-	S3_UploadIndexImage_FullMethodName   = "/S3/UploadIndexImage"
-	S3_UpdateIndexImage_FullMethodName   = "/S3/UpdateIndexImage"
 	S3_UploadIndexImageV2_FullMethodName = "/S3/UploadIndexImageV2"
 	S3_UpdateIndexImageV2_FullMethodName = "/S3/UpdateIndexImageV2"
 	S3_GetUserFacesByYID_FullMethodName  = "/S3/GetUserFacesByYID"
@@ -33,8 +31,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type S3Client interface {
 	UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*CommonResponse, error)
-	UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*CommonResponse, error)
-	UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*CommonResponse, error)
+	// rpc UploadIndexImage(UploadIndexImageRequest) returns (CommonResponse);
+	// rpc UpdateIndexImage(UpdateIndexImageRequest) returns (CommonResponse);
 	UploadIndexImageV2(ctx context.Context, in *UploadIndexImageRequestV2, opts ...grpc.CallOption) (*CommonResponse, error)
 	UpdateIndexImageV2(ctx context.Context, in *UpdateIndexImageRequestV2, opts ...grpc.CallOption) (*CommonResponse, error)
 	GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponse, error)
@@ -53,26 +51,6 @@ func (c *s3Client) UploadConstImage(ctx context.Context, in *UploadConstImageReq
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CommonResponse)
 	err := c.cc.Invoke(ctx, S3_UploadConstImage_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *s3Client) UploadIndexImage(ctx context.Context, in *UploadIndexImageRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CommonResponse)
-	err := c.cc.Invoke(ctx, S3_UploadIndexImage_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *s3Client) UpdateIndexImage(ctx context.Context, in *UpdateIndexImageRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CommonResponse)
-	err := c.cc.Invoke(ctx, S3_UpdateIndexImage_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -124,8 +102,8 @@ func (c *s3Client) GetConstImageByYID(ctx context.Context, in *GetConstImageRequ
 // for forward compatibility
 type S3Server interface {
 	UploadConstImage(context.Context, *UploadConstImageRequest) (*CommonResponse, error)
-	UploadIndexImage(context.Context, *UploadIndexImageRequest) (*CommonResponse, error)
-	UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*CommonResponse, error)
+	// rpc UploadIndexImage(UploadIndexImageRequest) returns (CommonResponse);
+	// rpc UpdateIndexImage(UpdateIndexImageRequest) returns (CommonResponse);
 	UploadIndexImageV2(context.Context, *UploadIndexImageRequestV2) (*CommonResponse, error)
 	UpdateIndexImageV2(context.Context, *UpdateIndexImageRequestV2) (*CommonResponse, error)
 	GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponse, error)
@@ -139,12 +117,6 @@ type UnimplementedS3Server struct {
 
 func (UnimplementedS3Server) UploadConstImage(context.Context, *UploadConstImageRequest) (*CommonResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadConstImage not implemented")
-}
-func (UnimplementedS3Server) UploadIndexImage(context.Context, *UploadIndexImageRequest) (*CommonResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UploadIndexImage not implemented")
-}
-func (UnimplementedS3Server) UpdateIndexImage(context.Context, *UpdateIndexImageRequest) (*CommonResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateIndexImage not implemented")
 }
 func (UnimplementedS3Server) UploadIndexImageV2(context.Context, *UploadIndexImageRequestV2) (*CommonResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadIndexImageV2 not implemented")
@@ -185,42 +157,6 @@ func _S3_UploadConstImage_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(S3Server).UploadConstImage(ctx, req.(*UploadConstImageRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _S3_UploadIndexImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UploadIndexImageRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(S3Server).UploadIndexImage(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: S3_UploadIndexImage_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(S3Server).UploadIndexImage(ctx, req.(*UploadIndexImageRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _S3_UpdateIndexImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateIndexImageRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(S3Server).UpdateIndexImage(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: S3_UpdateIndexImage_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(S3Server).UpdateIndexImage(ctx, req.(*UpdateIndexImageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -307,14 +243,6 @@ var S3_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadConstImage",
 			Handler:    _S3_UploadConstImage_Handler,
-		},
-		{
-			MethodName: "UploadIndexImage",
-			Handler:    _S3_UploadIndexImage_Handler,
-		},
-		{
-			MethodName: "UpdateIndexImage",
-			Handler:    _S3_UpdateIndexImage_Handler,
 		},
 		{
 			MethodName: "UploadIndexImageV2",
