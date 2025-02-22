@@ -31,11 +31,9 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type S3Client interface {
 	UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*CommonResponse, error)
-	// rpc UploadIndexImage(UploadIndexImageRequest) returns (CommonResponse);
-	// rpc UpdateIndexImage(UpdateIndexImageRequest) returns (CommonResponse);
 	UploadIndexImageV2(ctx context.Context, in *UploadIndexImageRequestV2, opts ...grpc.CallOption) (*CommonResponse, error)
 	UpdateIndexImageV2(ctx context.Context, in *UpdateIndexImageRequestV2, opts ...grpc.CallOption) (*CommonResponse, error)
-	GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponse, error)
+	GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponseV2, error)
 	GetConstImageByYID(ctx context.Context, in *GetConstImageRequest, opts ...grpc.CallOption) (*GetConstImageResponse, error)
 }
 
@@ -77,9 +75,9 @@ func (c *s3Client) UpdateIndexImageV2(ctx context.Context, in *UpdateIndexImageR
 	return out, nil
 }
 
-func (c *s3Client) GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponse, error) {
+func (c *s3Client) GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponseV2, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetUserFacesResponse)
+	out := new(GetUserFacesResponseV2)
 	err := c.cc.Invoke(ctx, S3_GetUserFacesByYID_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -102,11 +100,9 @@ func (c *s3Client) GetConstImageByYID(ctx context.Context, in *GetConstImageRequ
 // for forward compatibility
 type S3Server interface {
 	UploadConstImage(context.Context, *UploadConstImageRequest) (*CommonResponse, error)
-	// rpc UploadIndexImage(UploadIndexImageRequest) returns (CommonResponse);
-	// rpc UpdateIndexImage(UpdateIndexImageRequest) returns (CommonResponse);
 	UploadIndexImageV2(context.Context, *UploadIndexImageRequestV2) (*CommonResponse, error)
 	UpdateIndexImageV2(context.Context, *UpdateIndexImageRequestV2) (*CommonResponse, error)
-	GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponse, error)
+	GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponseV2, error)
 	GetConstImageByYID(context.Context, *GetConstImageRequest) (*GetConstImageResponse, error)
 	mustEmbedUnimplementedS3Server()
 }
@@ -124,7 +120,7 @@ func (UnimplementedS3Server) UploadIndexImageV2(context.Context, *UploadIndexIma
 func (UnimplementedS3Server) UpdateIndexImageV2(context.Context, *UpdateIndexImageRequestV2) (*CommonResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateIndexImageV2 not implemented")
 }
-func (UnimplementedS3Server) GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponse, error) {
+func (UnimplementedS3Server) GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponseV2, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserFacesByYID not implemented")
 }
 func (UnimplementedS3Server) GetConstImageByYID(context.Context, *GetConstImageRequest) (*GetConstImageResponse, error) {
