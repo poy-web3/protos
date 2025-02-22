@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	S3_UploadConstImage_FullMethodName   = "/S3/UploadConstImage"
-	S3_UploadIndexImageV2_FullMethodName = "/S3/UploadIndexImageV2"
-	S3_UpdateIndexImageV2_FullMethodName = "/S3/UpdateIndexImageV2"
-	S3_GetUserFacesByYID_FullMethodName  = "/S3/GetUserFacesByYID"
-	S3_GetConstImageByYID_FullMethodName = "/S3/GetConstImageByYID"
+	S3_UploadConstImage_FullMethodName    = "/S3/UploadConstImage"
+	S3_UploadIndexImageV2_FullMethodName  = "/S3/UploadIndexImageV2"
+	S3_UpdateIndexImageV2_FullMethodName  = "/S3/UpdateIndexImageV2"
+	S3_GetUserFacesByYID_FullMethodName   = "/S3/GetUserFacesByYID"
+	S3_GetUserFacesByYIDV2_FullMethodName = "/S3/GetUserFacesByYIDV2"
+	S3_GetConstImageByYID_FullMethodName  = "/S3/GetConstImageByYID"
 )
 
 // S3Client is the client API for S3 service.
@@ -33,7 +34,8 @@ type S3Client interface {
 	UploadConstImage(ctx context.Context, in *UploadConstImageRequest, opts ...grpc.CallOption) (*CommonResponse, error)
 	UploadIndexImageV2(ctx context.Context, in *UploadIndexImageRequestV2, opts ...grpc.CallOption) (*CommonResponse, error)
 	UpdateIndexImageV2(ctx context.Context, in *UpdateIndexImageRequestV2, opts ...grpc.CallOption) (*CommonResponse, error)
-	GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponseV2, error)
+	GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponse, error)
+	GetUserFacesByYIDV2(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponseV2, error)
 	GetConstImageByYID(ctx context.Context, in *GetConstImageRequest, opts ...grpc.CallOption) (*GetConstImageResponse, error)
 }
 
@@ -75,10 +77,20 @@ func (c *s3Client) UpdateIndexImageV2(ctx context.Context, in *UpdateIndexImageR
 	return out, nil
 }
 
-func (c *s3Client) GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponseV2, error) {
+func (c *s3Client) GetUserFacesByYID(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserFacesResponse)
+	err := c.cc.Invoke(ctx, S3_GetUserFacesByYID_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *s3Client) GetUserFacesByYIDV2(ctx context.Context, in *GetUserFacesRequest, opts ...grpc.CallOption) (*GetUserFacesResponseV2, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetUserFacesResponseV2)
-	err := c.cc.Invoke(ctx, S3_GetUserFacesByYID_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, S3_GetUserFacesByYIDV2_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +114,8 @@ type S3Server interface {
 	UploadConstImage(context.Context, *UploadConstImageRequest) (*CommonResponse, error)
 	UploadIndexImageV2(context.Context, *UploadIndexImageRequestV2) (*CommonResponse, error)
 	UpdateIndexImageV2(context.Context, *UpdateIndexImageRequestV2) (*CommonResponse, error)
-	GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponseV2, error)
+	GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponse, error)
+	GetUserFacesByYIDV2(context.Context, *GetUserFacesRequest) (*GetUserFacesResponseV2, error)
 	GetConstImageByYID(context.Context, *GetConstImageRequest) (*GetConstImageResponse, error)
 	mustEmbedUnimplementedS3Server()
 }
@@ -120,8 +133,11 @@ func (UnimplementedS3Server) UploadIndexImageV2(context.Context, *UploadIndexIma
 func (UnimplementedS3Server) UpdateIndexImageV2(context.Context, *UpdateIndexImageRequestV2) (*CommonResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateIndexImageV2 not implemented")
 }
-func (UnimplementedS3Server) GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponseV2, error) {
+func (UnimplementedS3Server) GetUserFacesByYID(context.Context, *GetUserFacesRequest) (*GetUserFacesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserFacesByYID not implemented")
+}
+func (UnimplementedS3Server) GetUserFacesByYIDV2(context.Context, *GetUserFacesRequest) (*GetUserFacesResponseV2, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserFacesByYIDV2 not implemented")
 }
 func (UnimplementedS3Server) GetConstImageByYID(context.Context, *GetConstImageRequest) (*GetConstImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConstImageByYID not implemented")
@@ -211,6 +227,24 @@ func _S3_GetUserFacesByYID_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _S3_GetUserFacesByYIDV2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserFacesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(S3Server).GetUserFacesByYIDV2(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: S3_GetUserFacesByYIDV2_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(S3Server).GetUserFacesByYIDV2(ctx, req.(*GetUserFacesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _S3_GetConstImageByYID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetConstImageRequest)
 	if err := dec(in); err != nil {
@@ -251,6 +285,10 @@ var S3_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserFacesByYID",
 			Handler:    _S3_GetUserFacesByYID_Handler,
+		},
+		{
+			MethodName: "GetUserFacesByYIDV2",
+			Handler:    _S3_GetUserFacesByYIDV2_Handler,
 		},
 		{
 			MethodName: "GetConstImageByYID",

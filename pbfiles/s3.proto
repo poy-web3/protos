@@ -67,7 +67,8 @@ service S3 {
     rpc UploadConstImage(UploadConstImageRequest) returns (CommonResponse);
 	rpc UploadIndexImageV2(UploadIndexImageRequestV2) returns (CommonResponse);
 	rpc UpdateIndexImageV2(UpdateIndexImageRequestV2) returns (CommonResponse);
-	rpc GetUserFacesByYID(GetUserFacesRequest) returns (GetUserFacesResponseV2);
+	rpc GetUserFacesByYID(GetUserFacesRequest) returns (GetUserFacesResponse);
+	rpc GetUserFacesByYIDV2(GetUserFacesRequest) returns (GetUserFacesResponseV2);
 	rpc GetConstImageByYID(GetConstImageRequest) returns (GetConstImageResponse);
 }
 
